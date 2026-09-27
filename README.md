@@ -1,5 +1,10 @@
 # Magies Clean
 
+[![最新版本](https://img.shields.io/github/v/release/Zhangwei930/MagiesClean?label=%E6%9C%80%E6%96%B0%E7%89%88%E6%9C%AC)](https://github.com/Zhangwei930/MagiesClean/releases/latest)
+[![下载量](https://img.shields.io/github/downloads/Zhangwei930/MagiesClean/total?label=%E4%B8%8B%E8%BD%BD%E9%87%8F)](https://github.com/Zhangwei930/MagiesClean/releases)
+[![平台](https://img.shields.io/badge/%E5%B9%B3%E5%8F%B0-Windows%20%7C%20macOS-blue)](#下载)
+[![许可证](https://img.shields.io/github/license/Zhangwei930/MagiesClean?label=%E8%AE%B8%E5%8F%AF%E8%AF%81)](LICENSE)
+
 本地离线的自动批量去水印工具，支持图片与 PDF。所有处理都在你的电脑上完成，文件不会上传。
 
 > 仅用于处理你有权处理的图片与文档。
@@ -87,6 +92,10 @@ cargo run -p wm-runtime --release --bin magies-cli -- models   # 查看模型状
 |---|---|---|
 | [LaMa](https://github.com/advimman/lama)（ONNX 版 [Carve/LaMa-ONNX](https://huggingface.co/Carve/LaMa-ONNX)） | AI 修复 | 代码 Apache-2.0。注意：官方权重用 Places365 数据集训练，该数据集条款限定非商业研究与教学用途，商业使用前请自行评估 |
 | [PaddleOCR PP-OCRv4](https://github.com/PaddlePaddle/PaddleOCR)（ONNX 版 [SWHL/RapidOCR](https://huggingface.co/SWHL/RapidOCR)） | 文字检测与识别 | Apache-2.0 |
+
+## 更新记录
+
+见 [CHANGELOG.md](CHANGELOG.md)。
 
 ## 许可证
 
