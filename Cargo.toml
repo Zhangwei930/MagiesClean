@@ -1,0 +1,72 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/wm-core",
+    "crates/wm-common",
+    "crates/wm-image",
+    "crates/wm-pdf",
+    "crates/wm-detection",
+    "crates/wm-segmentation",
+    "crates/wm-removal",
+    "crates/wm-ai",
+    "crates/wm-batch",
+    "crates/wm-storage",
+    "crates/wm-runtime",
+    "apps/desktop/src-tauri",
+]
+
+[workspace.package]
+version = "1.0.0"
+edition = "2021"
+rust-version = "1.80"
+license = "MIT"
+repository = "https://github.com/Zhangwei930/MagiesClean"
+authors = ["Magies"]
+
+[workspace.dependencies]
+wm-core = { path = "crates/wm-core" }
+wm-common = { path = "crates/wm-common" }
+wm-image = { path = "crates/wm-image" }
+wm-pdf = { path = "crates/wm-pdf" }
+wm-detection = { path = "crates/wm-detection" }
+wm-segmentation = { path = "crates/wm-segmentation" }
+wm-removal = { path = "crates/wm-removal" }
+wm-ai = { path = "crates/wm-ai" }
+wm-batch = { path = "crates/wm-batch" }
+wm-storage = { path = "crates/wm-storage" }
+wm-runtime = { path = "crates/wm-runtime" }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+anyhow = "1"
+uuid = { version = "1", features = ["v4"] }
+sha2 = "0.10"
+hex = "0.4"
+blake3 = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+parking_lot = "0.12"
+crossbeam-channel = "0.5"
+rayon = "1"
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp", "bmp", "tiff", "rayon"] }
+kamadak-exif = "0.6"
+img-parts = "0.4"
+lopdf = "0.45"
+rusqlite = { version = "0.32", features = ["bundled"] }
+rustfft = "6"
+tempfile = "3"
+walkdir = "2"
+flate2 = "1"
+num_cpus = "1"
+
+[profile.dev]
+# 图像算法在 debug 下非常慢：依赖与工作区代码都做基础优化，保留调试信息
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 4

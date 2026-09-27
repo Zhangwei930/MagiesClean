@@ -1,0 +1,12 @@
+[package]
+name = "wm-removal"
+description = "去除引擎：Alpha Restore、快速修复、纹理合成、AI Inpaint Adapter、质量评估"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+wm-core.workspace = true
+wm-image.workspace = true
+rayon.workspace = true
+tracing.workspace = true

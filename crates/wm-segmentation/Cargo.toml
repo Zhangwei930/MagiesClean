@@ -1,0 +1,14 @@
+[package]
+name = "wm-segmentation"
+description = "候选区域像素分割与 Mask 后处理"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+wm-core.workspace = true
+wm-image.workspace = true
+tracing.workspace = true
+
+[dev-dependencies]
+image.workspace = true

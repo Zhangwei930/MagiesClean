@@ -1,0 +1,34 @@
+[package]
+name = "wm-runtime"
+description = "组合 Pipeline 与 Adapter，管理配置与生命周期"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+wm-core.workspace = true
+wm-common.workspace = true
+wm-image.workspace = true
+wm-pdf.workspace = true
+wm-detection.workspace = true
+wm-segmentation.workspace = true
+wm-removal.workspace = true
+wm-ai.workspace = true
+wm-batch.workspace = true
+wm-storage.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+parking_lot.workspace = true
+tracing.workspace = true
+uuid.workspace = true
+walkdir.workspace = true
+rayon.workspace = true
+image.workspace = true
+tracing-subscriber.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true
+
+[[bin]]
+name = "magies-cli"
+path = "src/bin/magies-cli.rs"

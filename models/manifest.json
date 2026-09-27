@@ -1,0 +1,69 @@
+{
+  "models": [
+    {
+      "id": "wm_detector",
+      "role": "detector",
+      "version": "1.0.0",
+      "file": "watermark-detector/wm_detector.onnx",
+      "sha256": "<actual-sha256-at-package-build>",
+      "inputSize": [
+        640,
+        640
+      ],
+      "opset": 17,
+      "license": "待定：训练数据与权重许可需在发布前审核"
+    },
+    {
+      "id": "wm_segmenter",
+      "role": "segmenter",
+      "version": "1.0.0",
+      "file": "watermark-segmenter/wm_segmenter.onnx",
+      "sha256": "<actual-sha256-at-package-build>",
+      "inputSize": [
+        320,
+        320
+      ],
+      "opset": 17,
+      "license": "待定"
+    },
+    {
+      "id": "ocr_det",
+      "role": "ocr_detector",
+      "version": "4.0.0",
+      "file": "ocr-detector/ocr_det.onnx",
+      "sha256": "d2a7720d45a54257208b1e13e36a8479894cb74155a5efe29462512d42f49da9",
+      "license": "Apache-2.0（PaddleOCR PP-OCRv4 中英文轻量检测模型；ONNX 转换 SWHL/RapidOCR）",
+      "inputSize": [
+        960,
+        960
+      ]
+    },
+    {
+      "id": "ocr_rec",
+      "role": "ocr_recognizer",
+      "version": "4.0.0",
+      "file": "ocr-recognizer/ocr_rec.onnx",
+      "sha256": "48fc40f24f6d2a207a2b1091d3437eb3cc3eb6b676dc3ef9c37384005483683b",
+      "license": "Apache-2.0（PaddleOCR PP-OCRv4 中英文轻量识别模型；ONNX 转换 SWHL/RapidOCR；字库 ppocr_keys_v1）",
+      "inputSize": [
+        320,
+        48
+      ],
+      "dict": "ocr-recognizer/ppocr_keys_v1.txt"
+    },
+    {
+      "id": "lama",
+      "role": "inpainting",
+      "version": "1.0.0",
+      "file": "inpainting/lama.onnx",
+      "sha256": "1faef5301d78db7dda502fe59966957ec4b79dd64e16f03ed96913c7a4eb68d6",
+      "inputSize": [
+        512,
+        512
+      ],
+      "outputScale": 255.0,
+      "license": "Apache-2.0（advimman/lama 代码；ONNX 导出 Carve/LaMa-ONNX lama_fp32.onnx）。权重训练数据 Places365 限非商业研究用途，商业分发前需法务确认",
+      "opset": 17
+    }
+  ]
+}

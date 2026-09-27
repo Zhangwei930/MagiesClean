@@ -1,0 +1,21 @@
+[package]
+name = "wm-ai"
+description = "ONNX Runtime 封装、模型管理与 manifest 校验"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[features]
+default = ["onnx"]
+# 关闭后仍可编译与运行（模型状态显示为“运行时不可用”），便于在无网络的 CI 中构建核心库。
+onnx = ["dep:ort"]
+
+[dependencies]
+wm-core.workspace = true
+wm-common.workspace = true
+wm-image.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+parking_lot.workspace = true
+ort = { version = "=2.0.0-rc.10", optional = true }

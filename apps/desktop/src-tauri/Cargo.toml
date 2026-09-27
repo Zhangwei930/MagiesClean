@@ -1,0 +1,25 @@
+[package]
+name = "magies-clean"
+description = "Magies Clean 自动批量去水印（桌面端）"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[lib]
+name = "magies_clean_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["protocol-asset"] }
+tauri-plugin-dialog = "2"
+tauri-plugin-opener = "2"
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+wm-core.workspace = true
+wm-runtime.workspace = true
+wm-storage.workspace = true
+wm-ai.workspace = true

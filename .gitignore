@@ -1,0 +1,12 @@
+# 构建产物
+/target/
+apps/desktop/node_modules/
+apps/desktop/dist/
+apps/desktop/src-tauri/target/
+apps/desktop/src-tauri/gen/
+
+# 模型权重体积大，不入库：用 scripts/fetch-models.sh 下载并校验
+models/**/*.onnx
+models/**/*.part
+
+.DS_Store

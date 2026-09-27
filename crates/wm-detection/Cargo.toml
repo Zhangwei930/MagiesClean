@@ -1,0 +1,17 @@
+[package]
+name = "wm-detection"
+description = "检测器与候选融合：批次特征、重复图案、叠加层、文字分类"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+wm-core.workspace = true
+wm-common.workspace = true
+wm-image.workspace = true
+wm-removal.workspace = true
+rustfft.workspace = true
+rayon.workspace = true
+serde.workspace = true
+tracing.workspace = true
+uuid.workspace = true

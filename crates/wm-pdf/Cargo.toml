@@ -1,0 +1,18 @@
+[package]
+name = "wm-pdf"
+description = "PDF 解析、分类、原生水印检测/删除与嵌入图片替换"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+wm-core.workspace = true
+wm-common.workspace = true
+wm-image.workspace = true
+lopdf.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+tracing.workspace = true
+flate2.workspace = true
+image.workspace = true
+uuid.workspace = true
