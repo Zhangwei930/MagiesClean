@@ -9,11 +9,17 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
+# Windows（Git Bash）上没有 python3 / shasum 时的替代
+PY=$(command -v python3 || command -v python)
+sha256() {
+  if command -v sha256sum >/dev/null 2>&1; then sha256sum "$1" | cut -d' ' -f1; else shasum -a 256 "$1" | cut -d' ' -f1; fi
+}
+
 fetch() {
   local id="$1" url="$2" dest="models/$3"
   local want
-  want=$(python3 -c "import json;print(next(m['sha256'] for m in json.load(open('models/manifest.json'))['models'] if m['id']=='$id'))")
-  if [[ -f "$dest" ]] && [[ "$(shasum -a 256 "$dest" | cut -d' ' -f1)" == "$want" ]]; then
+  want=$("$PY" -c "import json;print(next(m['sha256'] for m in json.load(open('models/manifest.json', encoding='utf-8'))['models'] if m['id']=='$id'))")
+  if [[ -f "$dest" ]] && [[ "$(sha256 "$dest")" == "$want" ]]; then
     echo "✓ $id 已存在且校验通过"
     return
   fi
@@ -21,7 +27,7 @@ fetch() {
   echo "↓ 下载 $id ..."
   curl -L --fail --progress-bar -o "$dest.part" "$url"
   local got
-  got=$(shasum -a 256 "$dest.part" | cut -d' ' -f1)
+  got=$(sha256 "$dest.part")
   if [[ "$got" != "$want" ]]; then
     rm -f "$dest.part"
     echo "✗ $id 校验失败：期望 $want，实际 $got" >&2

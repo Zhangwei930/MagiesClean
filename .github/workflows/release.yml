@@ -1,0 +1,114 @@
+# 构建并发布安装包：推送 v* 标签时自动构建 Windows / macOS（Apple 芯片、Intel）并上传到对应的发布。
+# 也可以在 Actions 页面手动运行，指定版本标签和要构建的平台。
+name: 构建并发布安装包
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 发布版本的标签（例如 v1.0.0）
+        required: true
+      platforms:
+        description: 要构建的平台，逗号分隔：windows, macos-arm64, macos-x64
+        required: true
+        default: windows,macos-arm64,macos-x64
+
+permissions:
+  contents: write
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      tag: ${{ steps.plan.outputs.tag }}
+    steps:
+      - name: 确定版本与平台
+        id: plan
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          INPUT_TAG: ${{ inputs.tag }}
+          INPUT_PLATFORMS: ${{ inputs.platforms }}
+        run: |
+          if [ "$EVENT" = "workflow_dispatch" ]; then
+            tag="$INPUT_TAG"; want="$INPUT_PLATFORMS"
+          else
+            tag="$GITHUB_REF_NAME"; want="windows,macos-arm64,macos-x64"
+          fi
+          all='[
+            {"id":"windows","os":"windows-latest","target":"","bundles":"nsis"},
+            {"id":"macos-arm64","os":"macos-latest","target":"","bundles":"dmg"},
+            {"id":"macos-x64","os":"macos-latest","target":"x86_64-apple-darwin","bundles":"dmg"}
+          ]'
+          matrix=$(python3 -c "import json,sys; want=[w.strip() for w in sys.argv[1].split(',')]; print(json.dumps({'include':[x for x in json.loads(sys.argv[2]) if x['id'] in want]}))" "$want" "$all")
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+      - name: 确保发布存在
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.plan.outputs.tag }}
+        run: gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "Magies Clean $TAG" --notes "安装包构建中……"
+
+  build:
+    needs: plan
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.plan.outputs.tag }}
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.id }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: apps/desktop/package-lock.json
+
+      - name: 下载并校验模型
+        shell: bash
+        run: scripts/fetch-models.sh
+
+      - name: 安装前端依赖
+        working-directory: apps/desktop
+        run: npm ci
+
+      - name: 构建安装包
+        working-directory: apps/desktop
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.target }}" ]; then
+            npx tauri build --bundles ${{ matrix.bundles }} --target ${{ matrix.target }}
+          else
+            npx tauri build --bundles ${{ matrix.bundles }}
+          fi
+
+      - name: 上传到发布
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.plan.outputs.tag }}
+        run: |
+          ver="${TAG#v}"
+          dir="target/${{ matrix.target }}/release/bundle"
+          [ -z "${{ matrix.target }}" ] && dir="target/release/bundle"
+          mkdir -p out
+          case "${{ matrix.id }}" in
+            windows)     cp "$dir"/nsis/*-setup.exe "out/MagiesClean_${ver}_Windows_x64-setup.exe" ;;
+            macos-arm64) cp "$dir"/dmg/*.dmg "out/MagiesClean_${ver}_macOS_arm64.dmg" ;;
+            macos-x64)   cp "$dir"/dmg/*.dmg "out/MagiesClean_${ver}_macOS_x64.dmg" ;;
+          esac
+          ls -la out
+          gh release upload "$TAG" out/* --clobber --repo "$GITHUB_REPOSITORY"

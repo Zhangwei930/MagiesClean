@@ -34,7 +34,12 @@
   },
   "bundle": {
     "active": true,
-    "targets": ["app", "dmg", "nsis", "msi"],
+    "targets": [
+      "app",
+      "dmg",
+      "nsis",
+      "msi"
+    ],
     "category": "Productivity",
     "shortDescription": "本地离线的自动批量去水印工具",
     "longDescription": "Magies Clean 为你有权处理的图片与 PDF 提供自动水印检测、复核、批量去除与导出。100% 本地处理，文件不会离开你的设备。",
@@ -53,7 +58,9 @@
       "minimumSystemVersion": "11.0"
     },
     "windows": {
-      "webviewInstallMode": { "type": "offlineInstaller" }
+      "webviewInstallMode": {
+        "type": "embedBootstrapper"
+      }
     }
   }
 }

@@ -18,12 +18,19 @@
 
 ## 下载
 
-在 [Releases](https://github.com/Zhangwei930/MagiesClean/releases) 下载安装包。目前提供 macOS（Apple 芯片）版本。
+在 [Releases](https://github.com/Zhangwei930/MagiesClean/releases) 下载对应的安装包：
 
-安装包没有做苹果开发者签名，第一次打开时系统会提示“无法验证开发者”。处理方法任选其一：
+| 系统 | 文件 |
+|---|---|
+| Windows 10 / 11（64 位） | `MagiesClean_版本号_Windows_x64-setup.exe` |
+| macOS 11 及以上，Apple 芯片（M 系列） | `MagiesClean_版本号_macOS_arm64.dmg` |
+| macOS 11 及以上，Intel 芯片 | `MagiesClean_版本号_macOS_x64.dmg` |
 
-- 在“应用程序”里右键点 Magies Clean →“打开”→ 再点“打开”；
-- 或在终端执行：`xattr -dr com.apple.quarantine "/Applications/Magies Clean.app"`
+安装包没有做开发者签名，第一次打开时系统会拦一下：
+
+- **Windows**：提示“Windows 已保护你的电脑”时，点“更多信息”→“仍要运行”。
+- **macOS**：提示“无法验证开发者”时，在“应用程序”里右键点 Magies Clean →“打开”→ 再点“打开”；
+  或在终端执行 `xattr -dr com.apple.quarantine "/Applications/Magies Clean.app"`。
 
 ## 使用
 
@@ -33,7 +40,8 @@
 
 ## 从源码构建
 
-需要：Rust 1.80+、Node.js 18+，macOS 需安装 Xcode 命令行工具。
+需要：Rust 1.80+、Node.js 18+；macOS 需安装 Xcode 命令行工具，Windows 需安装 Visual Studio 生成工具（C++）。
+在 Windows 上用 Git Bash 运行下面的脚本。
 
 ```bash
 # 1. 下载模型（AI 修复与文字识别，约 225 MB，会校验 SHA-256）
@@ -55,6 +63,8 @@ cargo run -p wm-runtime --release --bin magies-cli -- models   # 查看模型状
 ```
 
 运行测试：`cargo test --workspace --release`
+
+推送 `v*` 标签后，GitHub Actions 会自动构建 Windows 与 macOS 安装包并上传到对应的发布（见 `.github/workflows/release.yml`）。
 
 ## 项目结构
 
